@@ -10,7 +10,8 @@ func _ready():
 		if child is State:
 			child.state_machine = self
 			states[child.name] = child
-	current_state.enter()
+	if current_state != null:
+		current_state.enter()
 
 func on_state_change(new_state_name: StringName) -> void:
 	var new_state = states.get(new_state_name)
