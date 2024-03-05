@@ -9,7 +9,7 @@ func _input(event):
 			emit_signal("state_change", "PlayerRun")
 		else:
 			emit_signal("state_change", "PlayerWalk")
-	if Input.is_action_just_pressed("flashlight"):
+	if Input.is_action_just_pressed("flashlight") && state_machine.current_state.name != "PlayerRun":
 		if !character.is_flashlight_on:
 			character.flashlight_animation.play("flashlight_start")
 		else:

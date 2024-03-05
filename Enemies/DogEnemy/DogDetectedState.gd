@@ -2,6 +2,7 @@ extends State
 
 
 func enter():
+	character.animation_player.play("run")
 	character.run_speed = 100
 	character.path_timer.start()
 

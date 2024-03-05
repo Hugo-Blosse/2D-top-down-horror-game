@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://deb6184i3ti0q"]
+[gd_scene load_steps=15 format=3 uid="uid://deb6184i3ti0q"]
 
 [ext_resource type="Script" path="res://Enemies/DogEnemy/DogEnemy.gd" id="1_52sop"]
 [ext_resource type="Texture2D" uid="uid://duq46xxfa41mo" path="res://Art/Enemies/zombiedog.png" id="2_ii8uv"]
@@ -6,9 +6,11 @@
 [ext_resource type="Script" path="res://Enemies/DogEnemy/DogEnemyState.gd" id="4_updi3"]
 [ext_resource type="Script" path="res://Enemies/DogEnemy/DogDetectedState.gd" id="5_77wlo"]
 [ext_resource type="Script" path="res://Enemies/DogEnemy/DogStartState.gd" id="6_u2gva"]
+[ext_resource type="Script" path="res://Enemies/DogEnemy/DogStopState.gd" id="7_mnbki"]
+[ext_resource type="Texture2D" uid="uid://c0pafs8sgn3v4" path="res://Art/Enemies/zombiedogrun.png" id="8_o3fby"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_lu3ke"]
-radius = 17.0294
+radius = 14.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_wc443"]
 radius = 165.003
@@ -18,7 +20,7 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/path = NodePath("Rotatable/Sprite2D:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -27,14 +29,57 @@ tracks/0/keys = {
 "update": 1,
 "values": [0]
 }
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Rotatable/Sprite2D:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("2_ii8uv")]
+}
+
+[sub_resource type="Animation" id="Animation_lhfdm"]
+resource_name = "run"
+length = 0.6
+loop_mode = 1
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Rotatable/Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("8_o3fby")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Rotatable/Sprite2D:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+}
 
 [sub_resource type="Animation" id="Animation_mjy7l"]
 resource_name = "walk"
 length = 1.2
+loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/path = NodePath("Rotatable/Sprite2D:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -43,10 +88,23 @@ tracks/0/keys = {
 "update": 1,
 "values": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
 }
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Rotatable/Sprite2D:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("2_ii8uv")]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_moeyw"]
 _data = {
 "RESET": SubResource("Animation_6ygge"),
+"run": SubResource("Animation_lhfdm"),
 "walk": SubResource("Animation_mjy7l")
 }
 
@@ -57,13 +115,7 @@ motion_mode = 1
 wall_min_slide_angle = 0.0
 script = ExtResource("1_52sop")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-rotation = 6.28319
-texture = ExtResource("2_ii8uv")
-hframes = 12
-
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
-debug_enabled = true
 
 [node name="PathTimer" type="Timer" parent="."]
 wait_time = 0.1
@@ -77,11 +129,20 @@ current_state = NodePath("DogStart")
 [node name="DogWalk" type="Node" parent="StateMachine"]
 script = ExtResource("4_updi3")
 
+[node name="WalkTimer" type="Timer" parent="StateMachine/DogWalk"]
+one_shot = true
+
 [node name="DogDetected" type="Node" parent="StateMachine"]
 script = ExtResource("5_77wlo")
 
 [node name="DogStart" type="Node" parent="StateMachine"]
 script = ExtResource("6_u2gva")
+
+[node name="DogStop" type="Node" parent="StateMachine"]
+script = ExtResource("7_mnbki")
+
+[node name="StopTimer" type="Timer" parent="StateMachine/DogStop"]
+one_shot = true
 
 [node name="Detection" type="Area2D" parent="."]
 collision_layer = 2
@@ -95,8 +156,30 @@ libraries = {
 "": SubResource("AnimationLibrary_moeyw")
 }
 
+[node name="Rotatable" type="Node2D" parent="."]
+
+[node name="Sprite2D" type="Sprite2D" parent="Rotatable"]
+texture = ExtResource("2_ii8uv")
+hframes = 12
+
+[node name="WallCheck" type="RayCast2D" parent="Rotatable"]
+target_position = Vector2(0, 23)
+
+[node name="TurnCheckLeft" type="RayCast2D" parent="Rotatable"]
+target_position = Vector2(23, 0)
+
+[node name="TurnCheckRight" type="RayCast2D" parent="Rotatable"]
+target_position = Vector2(-23, 0)
+
 [connection signal="state_change" from="." to="StateMachine" method="on_state_change"]
 [connection signal="timeout" from="PathTimer" to="." method="_on_path_timer_timeout"]
+[connection signal="check_new_dir" from="StateMachine/DogWalk" to="StateMachine/DogStop" method="_on_dog_walk_check_new_dir"]
+[connection signal="state_change" from="StateMachine/DogWalk" to="StateMachine" method="on_state_change"]
+[connection signal="timeout" from="StateMachine/DogWalk/WalkTimer" to="StateMachine/DogWalk" method="_on_walk_timer_timeout"]
 [connection signal="state_change" from="StateMachine/DogStart" to="StateMachine" method="on_state_change"]
+[connection signal="change_walk_dir" from="StateMachine/DogStop" to="StateMachine/DogWalk" method="_on_dog_change_walk_dir"]
+[connection signal="reverse_walk_dir" from="StateMachine/DogStop" to="StateMachine/DogWalk" method="_on_dog_reverse_walk_dir"]
+[connection signal="state_change" from="StateMachine/DogStop" to="StateMachine" method="on_state_change"]
+[connection signal="timeout" from="StateMachine/DogStop/StopTimer" to="StateMachine/DogStop" method="_on_stop_timer_timeout"]
 [connection signal="body_entered" from="Detection" to="." method="_on_detection_body_entered"]
 [connection signal="body_exited" from="Detection" to="." method="_on_detection_body_exited"]
