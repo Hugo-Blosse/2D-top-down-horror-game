@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://deb6184i3ti0q"]
+[gd_scene load_steps=17 format=3 uid="uid://deb6184i3ti0q"]
 
 [ext_resource type="Script" path="res://Enemies/DogEnemy/DogEnemy.gd" id="1_52sop"]
 [ext_resource type="Texture2D" uid="uid://duq46xxfa41mo" path="res://Art/Enemies/zombiedog.png" id="2_ii8uv"]
@@ -6,8 +6,11 @@
 [ext_resource type="Script" path="res://Enemies/DogEnemy/DogEnemyState.gd" id="4_updi3"]
 [ext_resource type="Script" path="res://Enemies/DogEnemy/DogDetectedState.gd" id="5_77wlo"]
 [ext_resource type="Script" path="res://Enemies/DogEnemy/DogStartState.gd" id="6_u2gva"]
+[ext_resource type="Script" path="res://Enemies/DogEnemy/DogInvestigateState.gd" id="7_b2rc2"]
 [ext_resource type="Script" path="res://Enemies/DogEnemy/DogStopState.gd" id="7_mnbki"]
 [ext_resource type="Texture2D" uid="uid://c0pafs8sgn3v4" path="res://Art/Enemies/zombiedogrun.png" id="8_o3fby"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0swch"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_lu3ke"]
 radius = 14.0
@@ -109,6 +112,7 @@ _data = {
 }
 
 [node name="DogEnemy" type="CharacterBody2D"]
+material = SubResource("ShaderMaterial_0swch")
 collision_layer = 2
 collision_mask = 3
 motion_mode = 1
@@ -116,6 +120,7 @@ wall_min_slide_angle = 0.0
 script = ExtResource("1_52sop")
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+debug_enabled = true
 
 [node name="PathTimer" type="Timer" parent="."]
 wait_time = 0.1
@@ -144,9 +149,13 @@ script = ExtResource("7_mnbki")
 [node name="StopTimer" type="Timer" parent="StateMachine/DogStop"]
 one_shot = true
 
+[node name="DogInvestigate" type="Node" parent="StateMachine"]
+script = ExtResource("7_b2rc2")
+
 [node name="Detection" type="Area2D" parent="."]
+unique_name_in_owner = true
 collision_layer = 2
-collision_mask = 2
+collision_mask = 12
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Detection"]
 shape = SubResource("CircleShape2D_wc443")
@@ -172,6 +181,7 @@ target_position = Vector2(23, 0)
 target_position = Vector2(-23, 0)
 
 [connection signal="state_change" from="." to="StateMachine" method="on_state_change"]
+[connection signal="navigation_finished" from="NavigationAgent2D" to="StateMachine/DogInvestigate" method="_on_navigation_agent_2d_navigation_finished"]
 [connection signal="timeout" from="PathTimer" to="." method="_on_path_timer_timeout"]
 [connection signal="check_new_dir" from="StateMachine/DogWalk" to="StateMachine/DogStop" method="_on_dog_walk_check_new_dir"]
 [connection signal="state_change" from="StateMachine/DogWalk" to="StateMachine" method="on_state_change"]
@@ -181,5 +191,8 @@ target_position = Vector2(-23, 0)
 [connection signal="reverse_walk_dir" from="StateMachine/DogStop" to="StateMachine/DogWalk" method="_on_dog_reverse_walk_dir"]
 [connection signal="state_change" from="StateMachine/DogStop" to="StateMachine" method="on_state_change"]
 [connection signal="timeout" from="StateMachine/DogStop/StopTimer" to="StateMachine/DogStop" method="_on_stop_timer_timeout"]
+[connection signal="state_change" from="StateMachine/DogInvestigate" to="StateMachine" method="on_state_change"]
+[connection signal="area_entered" from="Detection" to="." method="_on_detection_area_entered"]
+[connection signal="area_exited" from="Detection" to="." method="_on_detection_area_exited"]
 [connection signal="body_entered" from="Detection" to="." method="_on_detection_body_entered"]
 [connection signal="body_exited" from="Detection" to="." method="_on_detection_body_exited"]

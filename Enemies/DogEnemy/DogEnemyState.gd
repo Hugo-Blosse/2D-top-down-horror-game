@@ -22,6 +22,9 @@ var walk_dir_key : int
 
 
 func enter():
+	for body in %Detection.get_overlapping_bodies():
+		if body is Player:
+			emit_signal("state_change", "DogDetected") 
 	character.animation_player.play("walk")
 	walk_timer.wait_time = rng.randf_range(3, 10)
 	first_frame_checked = false

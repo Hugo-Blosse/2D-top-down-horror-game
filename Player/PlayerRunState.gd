@@ -5,17 +5,21 @@ extends PlayerState
 
 func enter():
 	character.restore_stamina = false
+	%PlayerSoundArea.scale = Vector2(2, 2)
 	if !character.is_flashlight_on:
+		character.animation_player.speed_scale = 3
 		character.animation_player.play("run")
 	else:
-		character.animation_player.play("walk")
-	character.animation_player.speed_scale = 3
+		character.flashlight_animation.speed_scale = 3
+		character.flashlight_animation.play("flashlight_run")
 	character.run_speed = run_speed
 	%StaminaRestoreTimer.stop()
 
 func exit():
+	%PlayerSoundArea.scale = Vector2(1, 1)
 	%StaminaRestoreTimer.start()
 	character.animation_player.stop()
+	character.flashlight_animation.stop()
 	character.run_speed = 0
 
 func physics_update(_delta):

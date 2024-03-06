@@ -52,5 +52,15 @@ func _on_detection_body_entered(body):
 
 
 func _on_detection_body_exited(body):
-	if body is Player:
-		emit_signal("state_change", "DogWalk")
+		if !%Detection.overlaps_area(player.player_sound_area) && body is Player:
+			emit_signal("state_change", "DogInvestigate")
+
+
+func _on_detection_area_entered(area):
+	if area.name == "PlayerSoundArea":
+		emit_signal("state_change", "DogDetected")
+
+
+func _on_detection_area_exited(area):
+	if !%Detection.overlaps_body(player) && area.name == "PlayerSoundArea":
+			emit_signal("state_change", "DogInvestigate")

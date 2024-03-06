@@ -1,10 +1,10 @@
 extends PlayerState
 
 func enter():
-	pass
+	%PlayerSoundCollision.disabled = true
 
 func exit():
-	pass
+	%PlayerSoundCollision.disabled = false
 
 func physics_update(_delta):
 	character.upper_body.rotation = character.global_position.direction_to(character.get_global_mouse_position()).angle() + PI/2
