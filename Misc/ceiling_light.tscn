@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3 uid="uid://c1fjhvn82gviv"]
+
+[ext_resource type="Script" path="res://Misc/light.gd" id="1_j4fpy"]
+
+[sub_resource type="Gradient" id="Gradient_ygxvt"]
+offsets = PackedFloat32Array(0, 0.701299)
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_b8dio"]
+gradient = SubResource("Gradient_ygxvt")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+
+[node name="CeilingLight" type="Node2D"]
+script = ExtResource("1_j4fpy")
+
+[node name="Light" type="PointLight2D" parent="."]
+scale = Vector2(2.60938, 2.60937)
+texture = SubResource("GradientTexture2D_b8dio")

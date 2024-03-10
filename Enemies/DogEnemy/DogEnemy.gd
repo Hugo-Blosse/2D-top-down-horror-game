@@ -1,11 +1,15 @@
 extends CharacterBody2D
 
 
+var scr = preload("res://Misc/sound_circle_red.tscn")
+
+
 @onready var navigation_agent_2d : NavigationAgent2D = $NavigationAgent2D
 @onready var path_timer : Timer = $PathTimer
 @onready var rotatable : Node2D = $Rotatable
 @onready var animation_player : AnimationPlayer = $AnimationPlayer
-@onready var wall_check : RayCast2D = $Rotatable/WallCheck
+@onready var wall_check : ShapeCast2D = $Rotatable/WallCheck
+@onready var sound_circle_timer : Timer = $SoundCircleTimer
 
 
 signal state_change(state_name : StringName)
@@ -18,9 +22,9 @@ var run_speed : float = 0
 var player : Player
 var dir : Vector2
 var last_dir : Vector2
+var scene : Node2D
 
 
-# OPTIMIZE wall detection
 # TODO attack
 
 
@@ -34,6 +38,11 @@ func _physics_process(delta):
 		last_dir = dir
 	else:
 		rotatable.rotation = last_dir.angle() - PI/2
+	if player.focused && sound_circle_timer.is_stopped():
+		var scr_inst = scr.instantiate()
+		scr_inst.global_position = self.global_position
+		scene.add_child(scr_inst)
+		sound_circle_timer.start()
 	velocity = dir * (walk_speed + run_speed)
 	move_and_slide()
 
@@ -64,3 +73,7 @@ func _on_detection_area_entered(area):
 func _on_detection_area_exited(area):
 	if !%Detection.overlaps_body(player) && area.name == "PlayerSoundArea":
 			emit_signal("state_change", "DogInvestigate")
+
+
+func create_sound_circle() -> void:
+	pass

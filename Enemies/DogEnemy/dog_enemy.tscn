@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://deb6184i3ti0q"]
+[gd_scene load_steps=19 format=3 uid="uid://deb6184i3ti0q"]
 
 [ext_resource type="Script" path="res://Enemies/DogEnemy/DogEnemy.gd" id="1_52sop"]
 [ext_resource type="Texture2D" uid="uid://duq46xxfa41mo" path="res://Art/Enemies/zombiedog.png" id="2_ii8uv"]
@@ -111,6 +111,12 @@ _data = {
 "walk": SubResource("Animation_mjy7l")
 }
 
+[sub_resource type="SeparationRayShape2D" id="SeparationRayShape2D_jtnn5"]
+length = 23.0
+
+[sub_resource type="SeparationRayShape2D" id="SeparationRayShape2D_7f0lr"]
+length = 23.0
+
 [node name="DogEnemy" type="CharacterBody2D"]
 material = SubResource("ShaderMaterial_0swch")
 collision_layer = 2
@@ -125,8 +131,13 @@ debug_enabled = true
 [node name="PathTimer" type="Timer" parent="."]
 wait_time = 0.1
 
+[node name="SoundCircleTimer" type="Timer" parent="."]
+wait_time = 3.0
+one_shot = true
+
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_lu3ke")
+debug_color = Color(0, 0.6, 0.701961, 0.419608)
 
 [node name="StateMachine" parent="." node_paths=PackedStringArray("current_state") instance=ExtResource("3_7baop")]
 current_state = NodePath("DogStart")
@@ -171,14 +182,22 @@ libraries = {
 texture = ExtResource("2_ii8uv")
 hframes = 12
 
-[node name="WallCheck" type="RayCast2D" parent="Rotatable"]
-target_position = Vector2(0, 23)
+[node name="WallCheck" type="ShapeCast2D" parent="Rotatable"]
+position = Vector2(-7, 0)
+shape = SubResource("SeparationRayShape2D_jtnn5")
+target_position = Vector2(14, 0)
 
-[node name="TurnCheckLeft" type="RayCast2D" parent="Rotatable"]
-target_position = Vector2(23, 0)
+[node name="TurnCheckRight" type="ShapeCast2D" parent="Rotatable"]
+position = Vector2(0, -7)
+rotation = 1.5708
+shape = SubResource("SeparationRayShape2D_7f0lr")
+target_position = Vector2(14, 0)
 
-[node name="TurnCheckRight" type="RayCast2D" parent="Rotatable"]
-target_position = Vector2(-23, 0)
+[node name="TurnCheckLeft" type="ShapeCast2D" parent="Rotatable"]
+position = Vector2(0, 7)
+rotation = -1.5708
+shape = SubResource("SeparationRayShape2D_7f0lr")
+target_position = Vector2(14, 0)
 
 [connection signal="state_change" from="." to="StateMachine" method="on_state_change"]
 [connection signal="navigation_finished" from="NavigationAgent2D" to="StateMachine/DogInvestigate" method="_on_navigation_agent_2d_navigation_finished"]

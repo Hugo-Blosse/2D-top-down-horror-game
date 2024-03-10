@@ -2,8 +2,8 @@ extends State
 
 
 @onready var stop_timer = $StopTimer
-@onready var turn_check_left: RayCast2D = $"../../Rotatable/TurnCheckLeft"
-@onready var turn_check_right : RayCast2D = $"../../Rotatable/TurnCheckRight"
+@onready var turn_check_left: ShapeCast2D = $"../../Rotatable/TurnCheckLeft"
+@onready var turn_check_right : ShapeCast2D = $"../../Rotatable/TurnCheckRight"
 
 
 signal change_walk_dir(walk_dir)

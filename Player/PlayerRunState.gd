@@ -10,7 +10,10 @@ func enter():
 		character.animation_player.speed_scale = 3
 		character.animation_player.play("run")
 	else:
+		character.animation_player.speed_scale = 3
 		character.flashlight_animation.speed_scale = 3
+		character.animation_player.stop()
+		character.animation_player.play("walk")
 		character.flashlight_animation.play("flashlight_run")
 	character.run_speed = run_speed
 	%StaminaRestoreTimer.stop()

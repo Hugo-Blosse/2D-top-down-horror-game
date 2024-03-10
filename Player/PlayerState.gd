@@ -7,6 +7,8 @@ func _input(event):
 		if %FocusTimer.is_stopped():
 			%FocusTimer.start()
 		return
+	character.focused = false
+	%FocusTimer.stop()
 	if state_machine.current_state.name == "PlayerHide":
 		return
 	character.dir.x = Input.get_axis("left", "right")
@@ -22,6 +24,3 @@ func _input(event):
 			character.flashlight_animation.play("flashlight_start")
 		else:
 			character.flashlight_animation.play("flashlight_end")
-	if Input.is_action_just_released("focus"):
-		character.focused = false
-		%FocusTimer.stop()

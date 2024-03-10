@@ -26,7 +26,8 @@ func enter():
 		if body is Player:
 			emit_signal("state_change", "DogDetected") 
 	character.animation_player.play("walk")
-	walk_timer.wait_time = rng.randf_range(3, 10)
+	walk_timer.wait_time = rng.randf_range(2, 10)
+	walk_timer.start()
 	first_frame_checked = false
 	if changed_walk_dir != Vector2.ZERO:
 		character.dir = changed_walk_dir
@@ -34,7 +35,6 @@ func enter():
 		return
 	walk_dir_key = rng.randi_range(0,3)
 	character.dir = walk_dir[walk_dir_key]
-	walk_timer.start()
 
 
 func exit():

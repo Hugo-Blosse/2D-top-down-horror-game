@@ -1,0 +1,26 @@
+[gd_scene load_steps=5 format=3 uid="uid://bo7ff2ccs45un"]
+
+[ext_resource type="Script" path="res://Misc/light.gd" id="1_i7kbc"]
+[ext_resource type="Texture2D" uid="uid://msueuaq7w5oa" path="res://Art/Misc/LightWhite.png" id="1_k4aa0"]
+
+[sub_resource type="Gradient" id="Gradient_hrkl4"]
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_4vy20"]
+gradient = SubResource("Gradient_hrkl4")
+fill = 1
+fill_from = Vector2(0, 0.5)
+fill_to = Vector2(0.5, 0.5)
+
+[node name="WallLight" type="Node2D"]
+z_index = -2
+script = ExtResource("1_i7kbc")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(0.5, 0)
+texture = ExtResource("1_k4aa0")
+
+[node name="Light" type="PointLight2D" parent="."]
+position = Vector2(16, 0)
+scale = Vector2(0.5, 0.5)
+texture = SubResource("GradientTexture2D_4vy20")

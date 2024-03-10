@@ -1,0 +1,106 @@
+[gd_scene load_steps=8 format=3 uid="uid://76rtel6oxb3g"]
+
+[ext_resource type="Texture2D" uid="uid://bgvcfods4up2n" path="res://Art/Misc/Breaker.png" id="1_hk5h6"]
+[ext_resource type="Script" path="res://Misc/breaker.gd" id="1_r3bip"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_n2qwt"]
+size = Vector2(16, 16)
+
+[sub_resource type="Animation" id="Animation_d4qeg"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_swjrp"]
+resource_name = "switch_off"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.1),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"_switch"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_33020"]
+resource_name = "switch_on"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.9),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"_switch"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_epx3n"]
+_data = {
+"RESET": SubResource("Animation_d4qeg"),
+"switch_off": SubResource("Animation_swjrp"),
+"switch_on": SubResource("Animation_33020")
+}
+
+[node name="Breaker" type="Node2D"]
+script = ExtResource("1_r3bip")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_hk5h6")
+hframes = 10
+
+[node name="BreakerArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 8
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BreakerArea"]
+shape = SubResource("RectangleShape2D_n2qwt")
+
+[node name="BreakerAnimation" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_epx3n")
+}

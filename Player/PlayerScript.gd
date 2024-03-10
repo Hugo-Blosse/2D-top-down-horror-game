@@ -8,9 +8,10 @@ extends CharacterBody2D
 @onready var upper_body : Node2D = $UpperBody
 @onready var animation_player : AnimationPlayer = $AnimationPlayer
 @onready var flashlight_animation = $FlashlightAnimation
-@onready var stamina_bar : TextureProgressBar = $CanvasLayer/UI/StaminaBar
+@onready var stamina_bar : TextureProgressBar = $CanvasLayer/UI/MarginContainer/StaminaBar
 @onready var state_machine :StateMachine = $StateMachine
 @onready var player_sound_area = %PlayerSoundArea
+@onready var hide_timer : Timer = $StateMachine/PlayerHide/HideTimer
 
 
 signal state_change(state_name : StringName)
@@ -24,8 +25,6 @@ var is_hidden : bool = false
 var focused : bool = false
 
 func _physics_process(delta):
-	if focused:
-		print("focused")
 	velocity = dir.normalized() * (walk_speed + run_speed)
 	if state_machine.current_state.name != "PlayerHide" && velocity == Vector2.ZERO && state_machine.current_state.name != "PlayerIdle":
 		animation_player.stop()
@@ -37,13 +36,11 @@ func _physics_process(delta):
 	move_and_slide()
 
 
-# OPTIMIZE smooth head, torso, legs rotation - it's kinda smooth(?)
-# OPTIMIZE flashlight & hand movement
-# OPTIMIZE run animation
-# TODO focused state - detect enemies by sound (circle location)
 # TODO death animation + effects
-# TODO hide animation + effects + objects
 # TODO diaboł enemy
+# OPTIMIZE flashlight & hand movement - light in wall
+# OPTIMIZE smooth circle
+# CHANGEABLE hide animation
 
 
 func _on_stamina_restore_timer_timeout():
@@ -60,3 +57,7 @@ func hide_player():
 
 func _on_focus_timer_timeout():
 	focused = true
+
+
+func _on_hide_timer_timeout():
+	is_hidden = !is_hidden
