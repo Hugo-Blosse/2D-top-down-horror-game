@@ -4,25 +4,31 @@ extends CharacterBody2D
 @export var walk_speed : float = 50
 
 
-@onready var lower_body : Node2D = $LowerBody
-@onready var upper_body : Node2D = $UpperBody
 @onready var animation_player : AnimationPlayer = $AnimationPlayer
 @onready var flashlight_animation = $FlashlightAnimation
+@onready var hide_timer : Timer = $StateMachine/PlayerHide/HideTimer
+@onready var lower_body : Node2D = $LowerBody
+@onready var player_sound_area : Area2D = %PlayerSoundArea
 @onready var stamina_bar : TextureProgressBar = $CanvasLayer/UI/MarginContainer/StaminaBar
 @onready var state_machine :StateMachine = $StateMachine
-@onready var player_sound_area = %PlayerSoundArea
-@onready var hide_timer : Timer = $StateMachine/PlayerHide/HideTimer
+@onready var upper_body : Node2D = $UpperBody
 
 
 signal state_change(state_name : StringName)
 
 
-var dir : Vector2
-var restore_stamina : bool = false
-var is_flashlight_on : bool = true
-var run_speed : float = 0
-var is_hidden : bool = false
 var focused : bool = false
+var dir : Vector2
+var is_hidden : bool = false
+var is_flashlight_on : bool = true
+var restore_stamina : bool = false
+var run_speed : float = 0
+
+
+func _ready():
+	for enemy in get_tree().get_nodes_in_group("enemies"):
+		enemy.player_kill.connect(_player_death)
+
 
 func _physics_process(delta):
 	velocity = dir.normalized() * (walk_speed + run_speed)
@@ -61,3 +67,7 @@ func _on_focus_timer_timeout():
 
 func _on_hide_timer_timeout():
 	is_hidden = !is_hidden
+
+
+func _player_death():
+	pass

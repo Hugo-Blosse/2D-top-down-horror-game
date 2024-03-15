@@ -4,28 +4,26 @@ extends CharacterBody2D
 var scr = preload("res://Misc/sound_circle_red.tscn")
 
 
+@onready var animation_player : AnimationPlayer = $AnimationPlayer
 @onready var navigation_agent_2d : NavigationAgent2D = $NavigationAgent2D
 @onready var path_timer : Timer = $PathTimer
 @onready var rotatable : Node2D = $Rotatable
-@onready var animation_player : AnimationPlayer = $AnimationPlayer
-@onready var wall_check : ShapeCast2D = $Rotatable/WallCheck
 @onready var sound_circle_timer : Timer = $SoundCircleTimer
+@onready var wall_check : ShapeCast2D = $Rotatable/WallCheck
 
 
+signal player_kill()
 signal state_change(state_name : StringName)
 
 
 const walk_speed : float = 50
 
 
-var run_speed : float = 0
-var player : Player
 var dir : Vector2
 var last_dir : Vector2
+var player : Player
+var run_speed : float = 0
 var scene : Node2D
-
-
-# TODO attack
 
 
 func _ready():
@@ -38,12 +36,9 @@ func _physics_process(delta):
 		last_dir = dir
 	else:
 		rotatable.rotation = last_dir.angle() - PI/2
-	if player.focused && sound_circle_timer.is_stopped():
-		var scr_inst = scr.instantiate()
-		scr_inst.global_position = self.global_position
-		scene.add_child(scr_inst)
-		sound_circle_timer.start()
+	create_sound_circle()
 	velocity = dir * (walk_speed + run_speed)
+	attack()
 	move_and_slide()
 
 
@@ -75,5 +70,16 @@ func _on_detection_area_exited(area):
 			emit_signal("state_change", "DogInvestigate")
 
 
+func attack() -> void:
+	for i in get_slide_collision_count():
+		var collision = get_slide_collision(i)
+		if collision.get_collider() == player:
+			emit_signal("player_kill")
+
+
 func create_sound_circle() -> void:
-	pass
+	if player.focused && sound_circle_timer.is_stopped():
+		var scr_inst = scr.instantiate()
+		scr_inst.global_position = self.global_position
+		scene.add_child(scr_inst)
+		sound_circle_timer.start()

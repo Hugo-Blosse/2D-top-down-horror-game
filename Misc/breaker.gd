@@ -9,10 +9,6 @@ extends Node2D
 signal switch()
 
 
-# TODO switch lights on/off
-# TODO react to player
-
-
 func _ready():
 	player = get_tree().get_first_node_in_group("player")
 
