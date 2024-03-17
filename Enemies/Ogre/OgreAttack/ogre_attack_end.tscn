@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=3 uid="uid://cy0ctffxvb2io"]
+
+[ext_resource type="Script" path="res://Enemies/Ogre/OgreAttack/OgreAttackSegment.gd" id="1_gb0a6"]
+[ext_resource type="Texture2D" uid="uid://c6l4ej7cxwfw7" path="res://Art/Enemies/ogreattackendsegment.png" id="2_1wnjg"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_homeo"]
+radius = 7.0
+height = 16.0
+
+[node name="StaticBody2D" type="StaticBody2D"]
+z_index = -1
+collision_layer = 16
+collision_mask = 25
+script = ExtResource("1_gb0a6")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_1wnjg")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CapsuleShape2D_homeo")

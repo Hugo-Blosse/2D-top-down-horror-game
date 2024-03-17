@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://b3yft8xc760gq"]
+
+[sub_resource type="Curve2D" id="Curve2D_sengw"]
+
+[node name="OgrePath" type="Path2D"]
+curve = SubResource("Curve2D_sengw")
+
+[node name="PathFollow2D" type="PathFollow2D" parent="."]
+
+[node name="RemoteTransform2D" type="RemoteTransform2D" parent="PathFollow2D"]

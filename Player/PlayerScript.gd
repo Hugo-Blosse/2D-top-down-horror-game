@@ -44,6 +44,8 @@ func _physics_process(delta):
 
 # TODO death animation + effects
 # TODO diaboł enemy
+# TODO scared enemy
+# TODO wall mimic enemy
 # OPTIMIZE flashlight & hand movement - light in wall
 # OPTIMIZE smooth circle
 # CHANGEABLE hide animation

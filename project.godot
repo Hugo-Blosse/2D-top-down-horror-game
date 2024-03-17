@@ -78,6 +78,7 @@ focus={
 2d_physics/layer_2="Enemies"
 2d_physics/layer_3="Sound"
 2d_physics/layer_4="Player"
+2d_physics/layer_5="EnemyProjectile"
 
 [rendering]
 

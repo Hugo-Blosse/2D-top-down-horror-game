@@ -1,42 +1,58 @@
-[gd_scene load_steps=9 format=3 uid="uid://c47p4dt2a755y"]
+[gd_scene load_steps=12 format=3 uid="uid://c47p4dt2a755y"]
 
 [ext_resource type="Script" path="res://Enemies/Ogre/Ogre.gd" id="1_2vxyp"]
-[ext_resource type="Texture2D" uid="uid://ccynrrbb2cpoq" path="res://icon.svg" id="2_xh54y"]
+[ext_resource type="Texture2D" uid="uid://c1xywdswiht3j" path="res://Art/Enemies/ogrehead.png" id="2_rbv4j"]
+[ext_resource type="Texture2D" uid="uid://bnioqnhmlaaf" path="res://Art/Enemies/ogretorso.png" id="2_ygn26"]
 [ext_resource type="PackedScene" uid="uid://bq2x0ivjdur2s" path="res://Misc/state_machine.tscn" id="3_pgtie"]
 [ext_resource type="Script" path="res://Enemies/Ogre/OgreWalkState.gd" id="4_o6xv4"]
 [ext_resource type="Script" path="res://Enemies/Ogre/OgreDetectedState.gd" id="5_lic8f"]
 [ext_resource type="Script" path="res://Enemies/Ogre/OgreLookState.gd" id="6_1bwme"]
-
-[sub_resource type="CircleShape2D" id="CircleShape2D_twbeu"]
-radius = 64.0703
+[ext_resource type="Script" path="res://Enemies/Ogre/OgreAttackState.gd" id="7_1ltdi"]
+[ext_resource type="Script" path="res://Enemies/Ogre/OgreStartState.gd" id="8_kh1eu"]
 
 [sub_resource type="ConvexPolygonShape2D" id="ConvexPolygonShape2D_4bbm6"]
 points = PackedVector2Array(120, 240, 0, 0, -120, 240)
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_twbeu"]
+radius = 40.1123
+
 [node name="Ogre" type="CharacterBody2D"]
+collision_layer = 2
+collision_mask = 2
 script = ExtResource("1_2vxyp")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("2_xh54y")
+[node name="Body" type="Node2D" parent="."]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource("CircleShape2D_twbeu")
+[node name="OgreBody" type="Sprite2D" parent="Body"]
+texture = ExtResource("2_ygn26")
+hframes = 5
 
-[node name="ShapeCast2D" type="ShapeCast2D" parent="."]
-position = Vector2(0, 60)
+[node name="Head" type="Node2D" parent="."]
+
+[node name="ShapeCast2D" type="ShapeCast2D" parent="Head"]
+position = Vector2(0, 10)
 shape = SubResource("ConvexPolygonShape2D_4bbm6")
 target_position = Vector2(0, 0)
 collision_mask = 8
 
-[node name="RayCast2D" type="RayCast2D" parent="."]
-position = Vector2(0, 60)
+[node name="RayCast2D" type="RayCast2D" parent="Head"]
+position = Vector2(0, 10)
 hit_from_inside = true
 
+[node name="OgreHead" type="Sprite2D" parent="Head"]
+texture = ExtResource("2_rbv4j")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_twbeu")
+
 [node name="StateMachine" parent="." node_paths=PackedStringArray("current_state") instance=ExtResource("3_pgtie")]
-current_state = NodePath("OgreDetected")
+current_state = NodePath("OgreStart")
 
 [node name="OgreWalk" type="Node" parent="StateMachine"]
 script = ExtResource("4_o6xv4")
+
+[node name="OgreWalkTimer" type="Timer" parent="StateMachine/OgreWalk"]
+one_shot = true
 
 [node name="OgreDetected" type="Node" parent="StateMachine"]
 script = ExtResource("5_lic8f")
@@ -44,4 +60,14 @@ script = ExtResource("5_lic8f")
 [node name="OgreLook" type="Node" parent="StateMachine"]
 script = ExtResource("6_1bwme")
 
+[node name="OgreAttack" type="Node" parent="StateMachine"]
+script = ExtResource("7_1ltdi")
+
+[node name="OgreStart" type="Node" parent="StateMachine"]
+script = ExtResource("8_kh1eu")
+
+[connection signal="state_change" from="." to="StateMachine" method="on_state_change"]
+[connection signal="state_change" from="StateMachine/OgreWalk" to="StateMachine" method="on_state_change"]
+[connection signal="timeout" from="StateMachine/OgreWalk/OgreWalkTimer" to="StateMachine/OgreWalk" method="_on_ogre_walk_timer_timeout"]
 [connection signal="state_change" from="StateMachine/OgreDetected" to="StateMachine" method="on_state_change"]
+[connection signal="state_change" from="StateMachine/OgreStart" to="StateMachine" method="on_state_change"]

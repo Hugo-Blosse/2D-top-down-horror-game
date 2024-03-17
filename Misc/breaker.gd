@@ -9,6 +9,9 @@ extends Node2D
 signal switch()
 
 
+# CHANGEABLe lights on flicker animation
+
+
 func _ready():
 	player = get_tree().get_first_node_in_group("player")
 
