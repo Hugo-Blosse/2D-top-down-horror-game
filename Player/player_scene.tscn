@@ -537,6 +537,12 @@ shadow_enabled = true
 texture = ExtResource("15_2so51")
 offset = Vector2(0, -200)
 
+[node name="Area2D" type="Area2D" parent="UpperBody/FlashLight"]
+position = Vector2(7.5, -25)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="UpperBody/FlashLight/Area2D"]
+polygon = PackedVector2Array(0, 0, 100, -350, 0, -380, -100, -350)
+
 [node name="Arms" type="Sprite2D" parent="UpperBody"]
 texture = ExtResource("6_vhtua")
 hframes = 23

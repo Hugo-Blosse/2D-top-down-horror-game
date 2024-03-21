@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://deb6184i3ti0q" path="res://Enemies/DogEnemy/dog_enemy.tscn" id="2_hwksg"]
 [ext_resource type="PackedScene" uid="uid://yf4lyxv7hqex" path="res://Player/player_scene.tscn" id="3_wh8f4"]
 [ext_resource type="PackedScene" uid="uid://ekh1ysp3js6u" path="res://Misc/hiding_spot.tscn" id="4_rej25"]
-[ext_resource type="Script" path="res://Enemies/Ogre/OgreTransform.gd" id="5_31ncr"]
+[ext_resource type="Script" path="res://Enemies/Ogre/OgrePath.gd" id="5_0kdn5"]
 [ext_resource type="PackedScene" uid="uid://c47p4dt2a755y" path="res://Enemies/Ogre/ogre_enemy.tscn" id="5_x7vqn"]
 [ext_resource type="PackedScene" uid="uid://76rtel6oxb3g" path="res://Misc/breaker.tscn" id="6_710cv"]
 [ext_resource type="PackedScene" uid="uid://c1fjhvn82gviv" path="res://Misc/ceiling_light.tscn" id="6_bhluj"]
@@ -218,7 +218,7 @@ point_count = 5
 script = ExtResource("1_012gx")
 
 [node name="CanvasModulate" type="CanvasModulate" parent="."]
-color = Color(0.25098, 0.25098, 0.25098, 1)
+color = Color(0, 0, 0, 1)
 
 [node name="TileMap" type="TileMap" parent="."]
 z_index = -4
@@ -238,20 +238,22 @@ position = Vector2(160, -96)
 position = Vector2(125, 0)
 scale = Vector2(0.5, 0.5)
 curve = SubResource("Curve2D_068g0")
+script = ExtResource("5_0kdn5")
 
 [node name="PathFollow2D" type="PathFollow2D" parent="OgrePath"]
 
 [node name="OgreTransform" type="RemoteTransform2D" parent="OgrePath/PathFollow2D"]
+rotation = -1.5708
 remote_path = NodePath("../../../Enemies/Ogre")
 update_scale = false
-script = ExtResource("5_31ncr")
 
 [node name="Enemies" type="Node" parent="."]
 
 [node name="Ogre" parent="Enemies" groups=["enemies"] instance=ExtResource("5_x7vqn")]
 position = Vector2(125, 0)
+rotation = -1.5708
 
-[node name="Enemy" parent="Enemies" groups=["enemies"] instance=ExtResource("2_hwksg")]
+[node name="Dog" parent="Enemies" groups=["enemies"] instance=ExtResource("2_hwksg")]
 visible = true
 position = Vector2(111, 242)
 collision_mask = 11
@@ -266,3 +268,6 @@ position = Vector2(-111, 80)
 
 [node name="CeilingLight" parent="Lights" instance=ExtResource("6_bhluj")]
 position = Vector2(48, -32)
+
+[connection signal="change_path_speed" from="Enemies/Ogre" to="OgrePath" method="_on_ogre_change_path_speed"]
+[connection signal="change_rotation" from="Enemies/Ogre" to="OgrePath" method="_on_ogre_change_rotation"]

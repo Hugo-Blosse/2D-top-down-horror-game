@@ -18,7 +18,7 @@ radius = 40.1123
 
 [node name="Ogre" type="CharacterBody2D"]
 collision_layer = 2
-collision_mask = 2
+collision_mask = 11
 script = ExtResource("1_2vxyp")
 
 [node name="Body" type="Node2D" parent="."]
@@ -30,6 +30,7 @@ hframes = 5
 [node name="Head" type="Node2D" parent="."]
 
 [node name="ShapeCast2D" type="ShapeCast2D" parent="Head"]
+visible = false
 position = Vector2(0, 10)
 shape = SubResource("ConvexPolygonShape2D_4bbm6")
 target_position = Vector2(0, 0)
@@ -60,14 +61,24 @@ script = ExtResource("5_lic8f")
 [node name="OgreLook" type="Node" parent="StateMachine"]
 script = ExtResource("6_1bwme")
 
+[node name="OgreLookTimer" type="Timer" parent="StateMachine/OgreLook"]
+one_shot = true
+
 [node name="OgreAttack" type="Node" parent="StateMachine"]
 script = ExtResource("7_1ltdi")
 
 [node name="OgreStart" type="Node" parent="StateMachine"]
 script = ExtResource("8_kh1eu")
 
+[node name="SoundCircleTimer" type="Timer" parent="."]
+wait_time = 6.0
+one_shot = true
+
 [connection signal="state_change" from="." to="StateMachine" method="on_state_change"]
 [connection signal="state_change" from="StateMachine/OgreWalk" to="StateMachine" method="on_state_change"]
 [connection signal="timeout" from="StateMachine/OgreWalk/OgreWalkTimer" to="StateMachine/OgreWalk" method="_on_ogre_walk_timer_timeout"]
 [connection signal="state_change" from="StateMachine/OgreDetected" to="StateMachine" method="on_state_change"]
+[connection signal="state_change" from="StateMachine/OgreLook" to="StateMachine" method="on_state_change"]
+[connection signal="timeout" from="StateMachine/OgreLook/OgreLookTimer" to="StateMachine/OgreLook" method="_on_ogre_look_timer_timeout"]
+[connection signal="state_change" from="StateMachine/OgreAttack" to="StateMachine" method="on_state_change"]
 [connection signal="state_change" from="StateMachine/OgreStart" to="StateMachine" method="on_state_change"]

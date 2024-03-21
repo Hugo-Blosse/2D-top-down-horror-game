@@ -9,12 +9,12 @@ func enter():
 	o.global_position = character.global_position
 	o.dir = character.global_position.direction_to(character.player.global_position)
 	add_child(o)
-
-
-func exit():
-	pass
+	o.attack_finished.connect(_on_attack_finished)
 
 
 func physics_update(_delta):
 	pass
 
+
+func _on_attack_finished():
+	emit_signal("state_change", "OgreWalk")

@@ -1,6 +1,7 @@
-[gd_scene load_steps=19 format=3 uid="uid://deb6184i3ti0q"]
+[gd_scene load_steps=20 format=3 uid="uid://deb6184i3ti0q"]
 
 [ext_resource type="Script" path="res://Enemies/DogEnemy/DogEnemy.gd" id="1_52sop"]
+[ext_resource type="Shader" path="res://Enemies/DogEnemy/dog_enemy.gdshader" id="1_n1sl1"]
 [ext_resource type="Texture2D" uid="uid://duq46xxfa41mo" path="res://Art/Enemies/zombiedog.png" id="2_ii8uv"]
 [ext_resource type="PackedScene" uid="uid://bq2x0ivjdur2s" path="res://Misc/state_machine.tscn" id="3_7baop"]
 [ext_resource type="Script" path="res://Enemies/DogEnemy/DogEnemyState.gd" id="4_updi3"]
@@ -11,6 +12,8 @@
 [ext_resource type="Texture2D" uid="uid://c0pafs8sgn3v4" path="res://Art/Enemies/zombiedogrun.png" id="8_o3fby"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_0swch"]
+shader = ExtResource("1_n1sl1")
+shader_parameter/is_lighted = false
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_lu3ke"]
 radius = 14.0
@@ -117,7 +120,7 @@ length = 23.0
 [sub_resource type="SeparationRayShape2D" id="SeparationRayShape2D_7f0lr"]
 length = 23.0
 
-[node name="DogEnemy" type="CharacterBody2D"]
+[node name="Dog" type="CharacterBody2D"]
 visible = false
 material = SubResource("ShaderMaterial_0swch")
 collision_layer = 2

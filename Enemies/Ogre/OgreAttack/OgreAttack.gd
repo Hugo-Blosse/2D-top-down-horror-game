@@ -12,6 +12,9 @@ var current_attack_segment : StaticBody2D
 var dir : Vector2 = Vector2.ZERO
 
 
+signal attack_finished()
+
+
 # OPTIMIZE attack
 
 
@@ -23,8 +26,11 @@ func _physics_process(delta):
 	if !attack_ended && global_position.distance_to(current_attack_segment.global_position) >= 16:
 		add_segment()
 	if attack_ended:
+		if !attack_segments.get_children():
+			emit_signal("attack_finished")
+			queue_free()
 		for child : StaticBody2D in attack_segments.get_children():
-			if global_position.distance_to(child.global_position) <= 8:
+			if global_position.distance_to(child.global_position) <= 16:
 				child.queue_free()
 
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://bo7ff2ccs45un"]
+[gd_scene load_steps=6 format=3 uid="uid://bo7ff2ccs45un"]
 
 [ext_resource type="Script" path="res://Misc/light.gd" id="1_i7kbc"]
 [ext_resource type="Texture2D" uid="uid://msueuaq7w5oa" path="res://Art/Misc/LightWhite.png" id="1_k4aa0"]
@@ -12,6 +12,9 @@ fill = 1
 fill_from = Vector2(0, 0.5)
 fill_to = Vector2(0.5, 0.5)
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_3sfig"]
+radius = 12.0
+
 [node name="WallLight" type="Node2D"]
 z_index = -2
 script = ExtResource("1_i7kbc")
@@ -24,3 +27,10 @@ texture = ExtResource("1_k4aa0")
 position = Vector2(16, 0)
 scale = Vector2(0.5, 0.5)
 texture = SubResource("GradientTexture2D_4vy20")
+
+[node name="Area2D" type="Area2D" parent="."]
+collision_layer = 32
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("CircleShape2D_3sfig")

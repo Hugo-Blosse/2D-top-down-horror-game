@@ -1,0 +1,23 @@
+[gd_scene load_steps=7 format=3 uid="uid://d2ah72hx8aqy8"]
+
+[ext_resource type="Shader" path="res://Enemies/Shy/syh_enemy.gdshader" id="1_w1mne"]
+[ext_resource type="Script" path="res://Enemies/Shy/ShyEnemy.gd" id="1_xqs7m"]
+[ext_resource type="PackedScene" uid="uid://bq2x0ivjdur2s" path="res://Misc/state_machine.tscn" id="2_ka0y6"]
+[ext_resource type="Script" path="res://Enemies/Shy/ShyStartState.gd" id="3_c3qdg"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ap3s1"]
+shader = ExtResource("1_w1mne")
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_cvn6f"]
+
+[node name="Syh" type="CharacterBody2D"]
+material = SubResource("ShaderMaterial_ap3s1")
+script = ExtResource("1_xqs7m")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_cvn6f")
+
+[node name="StateMachine" parent="." instance=ExtResource("2_ka0y6")]
+
+[node name="ShyStart" type="Node" parent="StateMachine"]
+script = ExtResource("3_c3qdg")
