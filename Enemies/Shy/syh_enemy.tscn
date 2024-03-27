@@ -1,9 +1,13 @@
-[gd_scene load_steps=7 format=3 uid="uid://d2ah72hx8aqy8"]
+[gd_scene load_steps=11 format=3 uid="uid://d2ah72hx8aqy8"]
 
 [ext_resource type="Shader" path="res://Enemies/Shy/syh_enemy.gdshader" id="1_w1mne"]
 [ext_resource type="Script" path="res://Enemies/Shy/ShyEnemy.gd" id="1_xqs7m"]
 [ext_resource type="PackedScene" uid="uid://bq2x0ivjdur2s" path="res://Misc/state_machine.tscn" id="2_ka0y6"]
+[ext_resource type="Texture2D" uid="uid://ccynrrbb2cpoq" path="res://icon.svg" id="3_6rfn8"]
 [ext_resource type="Script" path="res://Enemies/Shy/ShyStartState.gd" id="3_c3qdg"]
+[ext_resource type="Script" path="res://Enemies/Shy/ShyDetectedState.gd" id="6_jxj0l"]
+[ext_resource type="Script" path="res://Enemies/Shy/ShyDetectedStartState.gd" id="7_v5oyh"]
+[ext_resource type="Script" path="res://Enemies/Shy/ShyIdleState.gd" id="8_dsnxn"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ap3s1"]
 shader = ExtResource("1_w1mne")
@@ -14,10 +18,50 @@ shader = ExtResource("1_w1mne")
 material = SubResource("ShaderMaterial_ap3s1")
 script = ExtResource("1_xqs7m")
 
+[node name="ShyEnemyNavigationAgent" type="NavigationAgent2D" parent="."]
+debug_enabled = true
+
+[node name="PathTimer" type="Timer" parent="."]
+wait_time = 0.1
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.15, 0.15)
+texture = ExtResource("3_6rfn8")
+
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_cvn6f")
 
-[node name="StateMachine" parent="." instance=ExtResource("2_ka0y6")]
+[node name="StateMachine" parent="." node_paths=PackedStringArray("current_state") instance=ExtResource("2_ka0y6")]
+current_state = NodePath("ShyStart")
 
 [node name="ShyStart" type="Node" parent="StateMachine"]
 script = ExtResource("3_c3qdg")
+
+[node name="ShyDetected" type="Node" parent="StateMachine"]
+script = ExtResource("6_jxj0l")
+
+[node name="LightDetectionTimer" type="Timer" parent="StateMachine/ShyDetected"]
+
+[node name="ShyDetectedStart" type="Node" parent="StateMachine"]
+script = ExtResource("7_v5oyh")
+
+[node name="Timer" type="Timer" parent="StateMachine/ShyDetectedStart"]
+one_shot = true
+
+[node name="ShyIdle" type="Node" parent="StateMachine"]
+script = ExtResource("8_dsnxn")
+
+[node name="LightDetection" type="Area2D" parent="."]
+collision_layer = 2
+collision_mask = 32
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LightDetection"]
+shape = SubResource("CircleShape2D_cvn6f")
+
+[connection signal="state_change" from="." to="StateMachine" method="on_state_change"]
+[connection signal="timeout" from="PathTimer" to="." method="_on_path_timer_timeout"]
+[connection signal="state_change" from="StateMachine/ShyStart" to="StateMachine" method="on_state_change"]
+[connection signal="state_change" from="StateMachine/ShyDetected" to="StateMachine" method="on_state_change"]
+[connection signal="timeout" from="StateMachine/ShyDetected/LightDetectionTimer" to="StateMachine/ShyDetected" method="_on_light_detection_timer_timeout"]
+[connection signal="state_change" from="StateMachine/ShyDetectedStart" to="StateMachine" method="on_state_change"]
+[connection signal="timeout" from="StateMachine/ShyDetectedStart/Timer" to="StateMachine/ShyDetectedStart" method="_on_timer_timeout"]

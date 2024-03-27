@@ -1,4 +1,4 @@
-[gd_scene load_steps=36 format=3 uid="uid://dqd6b4x6uwnrb"]
+[gd_scene load_steps=37 format=3 uid="uid://dqd6b4x6uwnrb"]
 
 [ext_resource type="Script" path="res://level_1.gd" id="1_012gx"]
 [ext_resource type="Texture2D" uid="uid://cfkqylvfn0mwt" path="res://Art/Misc/TopDownTile.png" id="1_v3on4"]
@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://76rtel6oxb3g" path="res://Misc/breaker.tscn" id="6_710cv"]
 [ext_resource type="PackedScene" uid="uid://c1fjhvn82gviv" path="res://Misc/ceiling_light.tscn" id="6_bhluj"]
 [ext_resource type="PackedScene" uid="uid://bo7ff2ccs45un" path="res://Misc/wall_light.tscn" id="7_cck3p"]
+[ext_resource type="PackedScene" uid="uid://d2ah72hx8aqy8" path="res://Enemies/Shy/syh_enemy.tscn" id="8_ssndn"]
 
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_syk5k"]
 polygon = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
@@ -254,9 +255,10 @@ position = Vector2(125, 0)
 rotation = -1.5708
 
 [node name="Dog" parent="Enemies" groups=["enemies"] instance=ExtResource("2_hwksg")]
-visible = true
 position = Vector2(111, 242)
 collision_mask = 11
+
+[node name="Syh" parent="Enemies" groups=["enemies"] instance=ExtResource("8_ssndn")]
 
 [node name="Breaker" parent="." instance=ExtResource("6_710cv")]
 position = Vector2(-104, -104)

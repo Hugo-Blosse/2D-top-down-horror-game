@@ -21,4 +21,5 @@ func on_state_change(new_state_name: StringName) -> void:
 		current_state = new_state
 
 func _physics_process(delta):
+	print(current_state.name)
 	current_state.physics_update(delta)
