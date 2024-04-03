@@ -1,6 +1,7 @@
 class_name Player
 extends CharacterBody2D
 
+
 @export var walk_speed : float = 50
 
 
@@ -12,6 +13,7 @@ extends CharacterBody2D
 @onready var stamina_bar : TextureProgressBar = $CanvasLayer/UI/MarginContainer/StaminaBar
 @onready var state_machine :StateMachine = $StateMachine
 @onready var upper_body : Node2D = $UpperBody
+@onready var flashlight_area : Area2D = $UpperBody/Flashlight/FlashlightArea
 
 
 signal state_change(state_name : StringName)

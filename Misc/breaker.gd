@@ -9,7 +9,7 @@ extends Node2D
 signal switch()
 
 
-# CHANGEABLe lights on flicker animation
+# CHANGEABLE lights on flicker animation
 
 
 func _ready():
@@ -20,10 +20,14 @@ func _input(event):
 	if breaker_animation.is_playing():
 		return
 	if breaker_area.overlaps_body(player) && Input.is_action_just_pressed("interact"):
-		if $Sprite2D.frame == 9:
-			breaker_animation.play("switch_on")
-			return
-		breaker_animation.play("switch_off")
+		_breaker_used()
+
+
+func _breaker_used() -> void:
+	if $Sprite2D.frame == 9:
+		breaker_animation.play("switch_on")
+		return
+	breaker_animation.play("switch_off")
 
 
 func _switch() -> void:

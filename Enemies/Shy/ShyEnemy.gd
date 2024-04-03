@@ -15,11 +15,17 @@ const running_speed = 300
 const walking_speed = 50
 
 var player : Player
+var breaker : Node2D
 var scene
+var starting_position : Node2D = Node2D.new()
 var detection_started : bool = false
 var target : Node2D
 var speed : float = 100
 var dir : Vector2 = Vector2.ZERO
+
+
+func _ready():
+	starting_position.global_position = global_position
 
 
 func _physics_process(delta):
