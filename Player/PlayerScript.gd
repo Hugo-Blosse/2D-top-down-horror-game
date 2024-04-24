@@ -14,6 +14,7 @@ extends CharacterBody2D
 @onready var state_machine :StateMachine = $StateMachine
 @onready var upper_body : Node2D = $UpperBody
 @onready var flashlight_area : Area2D = $UpperBody/Flashlight/FlashlightArea
+@onready var flashlight : PointLight2D = $UpperBody/Flashlight/Flashlight
 
 
 signal state_change(state_name : StringName)

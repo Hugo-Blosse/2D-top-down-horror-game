@@ -5,6 +5,7 @@ extends CharacterBody2D
 @onready var shy_enemy_navigation_agent : NavigationAgent2D = $ShyEnemyNavigationAgent
 @onready var path_timer : Timer = $PathTimer
 @onready var state_machine : StateMachine = $StateMachine
+@onready var shy_enemy_ray : RayCast2D = $ShyEnemyRay
 
 
 signal player_kill()
@@ -13,6 +14,7 @@ signal state_change(state_name : StringName)
 
 const running_speed = 300
 const walking_speed = 50
+
 
 var player : Player
 var breaker : Node2D
@@ -26,10 +28,10 @@ var dir : Vector2 = Vector2.ZERO
 
 func _ready():
 	starting_position.global_position = global_position
+	player = get_tree().get_first_node_in_group("player")
 
 
 func _physics_process(delta):
-	player = get_tree().get_first_node_in_group("player")
 	if state_machine.current_state.name != "ShyDetected" && light_detection.get_overlapping_areas():
 		emit_signal("state_change", "ShyDetectedStart")
 	velocity = speed * dir
