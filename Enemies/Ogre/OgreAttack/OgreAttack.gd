@@ -36,7 +36,7 @@ func _physics_process(delta):
 
 func add_segment():
 	attack_stop_timer.start()
-	if current_attack_segment == null:
+	if current_attack_segment == null: 
 		current_attack_segment = attack_end.instantiate()
 	else:
 		current_attack_segment = attack_middle.instantiate()
